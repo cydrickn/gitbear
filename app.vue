@@ -1,6 +1,5 @@
 <script setup>
 import './assets/tailwind.scss'
-
 useMeta({
   htmlAttrs: {
     'data-theme': 'halloween'
