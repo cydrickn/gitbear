@@ -1,6 +1,6 @@
-import { readdir } from 'fs/promises';
+import {readdir} from 'fs/promises';
 import config from '#config';
-import { useQuery } from 'h3'
+import {useQuery} from 'h3'
 import simpleGit from "simple-git";
 
 export default async (req, res) => {
@@ -18,6 +18,7 @@ export default async (req, res) => {
         const info = { name: pathNames[pathNames.length - 1] };
         const git = simpleGit(childrenPath);
         info.type = (await git.checkIsRepo('bare')) ? 'project' : 'group';
+        info.path = '/' + path;
 
         if (info.type === 'group') {
             const files = (await readdir(childrenPath, {withFileTypes: true}))
@@ -37,6 +38,8 @@ export default async (req, res) => {
                 });
 
             info.children = await Promise.all(files);
+        } else {
+            info.branches = (await git.branch()).all;
         }
 
         return info;

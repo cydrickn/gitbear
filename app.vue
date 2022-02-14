@@ -1,15 +1,14 @@
 <script setup>
-import './assets/tailwind.scss'
 useMeta({
   htmlAttrs: {
-    'data-theme': 'halloween'
+    'data-theme': 'bumblebee'
   }
-})
+});
 </script>
 
 <template>
   <div>
-    <NuxtLayout>
+    <NuxtLayout >
       <NuxtPage />
     </NuxtLayout>
   </div>

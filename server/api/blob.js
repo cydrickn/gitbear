@@ -1,6 +1,5 @@
-import { readdir } from 'fs/promises';
 import config from '#config';
-import { useQuery } from 'h3'
+import {useQuery} from 'h3'
 import simpleGit from "simple-git";
 
 export default async (req, res) => {
@@ -9,10 +8,17 @@ export default async (req, res) => {
     const branch = params.branch;
     const path = params.path.trim('/');
     const repoPath = [reposFolder, params.repoPath].join('/');
+    const isRaw = params.isRaw || false;
 
     const git = simpleGit(repoPath);
 
-    const rawFiles = await git.raw(['ls-tree', '--name-only', branch, './' + path]);
+    const raw = await git.raw(['show', branch + ':' + path]);
 
-    return rawFiles.trim("\n").split("\n");
+    if (isRaw) {
+        return raw;
+    }
+
+    return {
+        content: raw.replaceAll("\r\n", "\n").replaceAll("\r", "\n").split("\n")
+    };
 }

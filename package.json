@@ -6,14 +6,20 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@nuxtjs/tailwindcss": "^5.0.0-4",
     "autoprefixer": "^10.4.2",
     "nuxt3": "latest",
     "postcss": "^8.4.6",
+    "postcss-import": "^14.0.2",
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0",
     "tailwindcss": "^3.0.22"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.0.0",
+    "@fortawesome/free-brands-svg-icons": "^6.0.0",
+    "@fortawesome/free-regular-svg-icons": "^6.0.0",
+    "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "daisyui": "^2.0.0-next.1",
     "simple-git": "^3.1.1"
   }

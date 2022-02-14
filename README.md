@@ -1,29 +1,13 @@
-# Nuxt 3 Minimal Starter
+# Gitwire
 
-We recommend to look at the [documentation](https://v3.nuxtjs.org).
+Git Bare Management
 
-## Setup
+## Introduction
 
-Make sure to install the dependencies
+Do you manage your own git bare repository?
+You want a web platform where you can use to manage bare repository?
 
-```bash
-yarn install
-```
+Gitwire will be your choice.
 
-## Development
+Gitwire is a web manage platform to manager your own bare repository.
 
-Start the development server on http://localhost:3000
-
-```bash
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-yarn build
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment).

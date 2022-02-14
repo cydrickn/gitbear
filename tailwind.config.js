@@ -1,5 +1,4 @@
 module.exports = {
-  mode: 'jit',
   content: [
     "./components/**/*.{js,vue}",
     "./layouts/**/*.vue",
@@ -8,6 +7,9 @@ module.exports = {
     "./app.vue"
   ],
   theme: {
+    container: {
+      center: true,
+    },
     extend: {},
   },
   plugins: [

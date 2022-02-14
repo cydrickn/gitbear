@@ -1,18 +1,18 @@
 <script setup>
+import {useCrumbs} from "../composables/useCrumbs";
+import Group from "../components/partials/group";
+
+definePageMeta({
+  layout: 'app'
+});
+useCrumbs().set([]);
 const client = useClient();
-const { data: children } = await useAsyncData('children', () => client('/api/children'));
+const {data: children} = await useAsyncData('children', () => client('/api/children'));
 </script>
 
 <template>
-  <div class="container">
-    <div>Groups and Projects</div>
-    <div>
-      <ul>
-        <li v-for="(child, key) in children" :key="key">
-          <NuxtLink :to="child.path">{{ child.name }}</NuxtLink>
-        </li>
-      </ul>
-    </div>
+  <div>
+    <group :children="children"></group>
   </div>
 </template>
 
