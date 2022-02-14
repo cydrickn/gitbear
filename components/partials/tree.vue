@@ -15,10 +15,11 @@ const { data: files } = await useAsyncData('tree', () => client('/api/tree', {
     repoPath: props.repoPath,
   }
 }));
+
 files.value.forEach((file) => {
-  file.path = ('/' + ([props.repoPath.trim('/'), file.type, props.branch, file.path].join('/')))
+  file.path = ('/' + ([props.repoPath.trim('/'), '-', file.type, props.branch, file.path].join('/')))
       .replace(/\/+/g, '/');
-  file.commitPath = ('/' + ([props.repoPath.trim('/'), 'commit', file.commit].join('/')))
+  file.commitPath = ('/' + ([props.repoPath.trim('/'), '-', 'commit', file.commit].join('/')))
       .replace(/\/+/g, '/');
 
   return file;

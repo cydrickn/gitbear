@@ -1,49 +1,53 @@
 import {readdir} from 'fs/promises';
+import fs from 'fs';
 import config from '#config';
 import {useQuery} from 'h3'
 import simpleGit from "simple-git";
+import {useUtils} from "~/composables/useUtils";
 
 export default async (req, res) => {
+    const utils = useUtils();
     const reposFolder = config.GIT_REPO_FOLDER;
     const params = await useQuery(req);
     let childrenPath = reposFolder.trim('/');
-    const path = params.path || '';
-    const pathNames = path.split('/');
+    let path = params.path || '';
+    let pathNames = path.split('/');
+
+    while (!fs.existsSync(childrenPath + '/' + path) && pathNames.length > 0) {
+        pathNames.pop();
+        path = pathNames.join('/');
+    }
 
     if (path !== '') {
         childrenPath += '/' + path.trim('/');
     }
 
-    try {
-        const info = { name: pathNames[pathNames.length - 1] };
-        const git = simpleGit(childrenPath);
-        info.type = (await git.checkIsRepo('bare')) ? 'project' : 'group';
-        info.path = '/' + path;
+    const info = { name: pathNames[pathNames.length - 1] };
+    const git = simpleGit(childrenPath);
+    info.type = (await git.checkIsRepo('bare')) ? 'project' : 'group';
+    info.path = '/' + path;
 
-        if (info.type === 'group') {
-            const files = (await readdir(childrenPath, {withFileTypes: true}))
-                .filter(file => {
-                    return file.isDirectory();
-                })
-                .map(async file => {
-                    let type = 'group';
-                    const git = simpleGit(childrenPath + '/' + file.name);
-                    const isRepo = await git.checkIsRepo('bare');
+    if (info.type === 'group') {
+        const files = (await readdir(childrenPath, {withFileTypes: true}))
+            .filter(file => {
+                return file.isDirectory();
+            })
+            .map(async file => {
+                let type = 'group';
+                const git = simpleGit(childrenPath + '/' + file.name);
+                const isRepo = await git.checkIsRepo('bare');
 
-                    if (isRepo) {
-                        type = 'project';
-                    }
+                if (isRepo) {
+                    type = 'project';
+                }
 
-                    return {name: file.name, path: '/' + path.trim('/') + '/' + file.name, type}
-                });
+                return {name: file.name, path: utils.normalizeUrl('/' + path.trim('/') + '/' + file.name), type}
+            });
 
-            info.children = await Promise.all(files);
-        } else {
-            info.branches = (await git.branch()).all;
-        }
-
-        return info;
-    } catch (err) {
-        throw err;
+        info.children = await Promise.all(files);
+    } else {
+        info.branches = (await git.branch()).all;
     }
+
+    return info;
 }

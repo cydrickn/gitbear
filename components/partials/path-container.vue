@@ -1,49 +1,37 @@
 <script setup>
 import ProjectMenu from "./project-menu";
-import {useInfo} from "../../composables/useInfo";
+import {useUtils} from "../../composables/useUtils";
 
-const params = useRoute().params;
-const repoPath = params.child.join('/');
-const filePaths = params.blob || params.tree || [];
-let lastType = 'tree';
-if (params.blob) {
-  lastType = 'blob';
-}
+const props = defineProps({
+  info: Object,
+  path: String,
+  type: String,
+  branch: String,
+})
 
-const branch = ref(filePaths[0]);
-const paths = filePaths.filter((val, key) => {
-  return key !== 0;
-});
-
-const { data: repoInfo } = await useInfo(repoPath);
-const pathsInfo = ref([{
-  name: repoInfo.value.name,
-  path: repoInfo.value.path
-}]);
-
+const utils = useUtils();
 const branches = ref([]);
-repoInfo.value.branches.forEach((currentBranch) => {
-  const branchPath = (repoInfo.value.path + '/' + lastType + '/' + currentBranch + '/' + paths.join('/')).replace(/\/+/g, '/');
+props.info.branches.forEach((currentBranch) => {
+  const branchPath = (props.info.path + '/' + props.type + '/' + currentBranch + '/' + props.path).replace(/\/+/g, '/');
   branches.value.push({
     name: currentBranch,
     path: branchPath
   })
 });
 
-let pathInc = '/';
 
+const pathsInfo = ref([]);
+let currentPath = '';
+const paths = props.path.split('/');
 paths.forEach((path, key) => {
-  let type = lastType;
-  if (key < paths.length - 1) {
-    type = 'tree';
-  }
-  pathInc += '/' + path;
+  const type = key < paths.length - 1 ? 'tree' : 'blob';
+  currentPath += '/' + path;
+
   pathsInfo.value.push({
     name: path,
-    path: (repoInfo.value.path + '/' + type + '/' + branch + '/' + pathInc).replace(/\/+/g, '/'),
+    path: utils.normalizeUrl([props.info.path, '-', type, props.branch, currentPath].join('/')),
   });
-})
-
+});
 </script>
 
 <template>
@@ -60,7 +48,8 @@ paths.forEach((path, key) => {
       </div>
       <div class="breadcrumbs ml-4">
         <ul>
-          <li v-for="(pathInfo, key) in pathsInfo" :key="key" class="before:"><nuxt-link :to="pathInfo.path">{{ pathInfo.name }}</nuxt-link></li>
+          <li><nuxt-link :to="info.path">{{ info.name }}</nuxt-link></li>
+          <li v-for="(pathInfo, key) in pathsInfo" :key="key"><nuxt-link :to="pathInfo.path">{{ pathInfo.name }}</nuxt-link></li>
         </ul>
       </div>
     </div>
