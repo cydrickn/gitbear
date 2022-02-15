@@ -1,6 +1,7 @@
 <script setup>
 import {useClient} from "../../composables/useClient";
 import {useMd} from "../../composables/useMd";
+import CurrentCommit from "../app/current-commit";
 
 const props = defineProps({
   branch: String,
@@ -9,7 +10,7 @@ const props = defineProps({
 });
 
 const client = useClient();
-const files= await client('/api/tree', {
+const { commit, tree: files } = await client('/api/tree', {
   params: {
     branch: props.branch,
     path: props.treePath,
@@ -25,6 +26,7 @@ files.forEach((file) => {
       .replace(/\/+/g, '/');
   file.commitPath = ('/' + ([props.repoPath.trim('/'), '-', 'commit', file.commit].join('/')))
       .replace(/\/+/g, '/');
+  file.icon = useGetFileType(file).icon;
 
   if (file.name === 'README.md') {
     readme = file;
@@ -48,20 +50,24 @@ if (readme) {
 
 <template>
   <div>
-    <div class="card card-bordered">
-      <div class="card-body px-0 gap-0">
-        <div v-for="(file,key) in files" :key="key" class="file">
-          <div class="mr-2 text-center">
-            <div class="w-4">
-              <i v-if="file.type === 'tree'" class="fa-solid fa-folder text-primary"></i>
-              <i v-else class="fa-solid fa-file text-accent"></i>
-            </div>
+    <current-commit :hash="commit.hash" :author="commit.author" :subject="commit.subject" :timestamp="commit.timestamp"></current-commit>
+    <div class="card card-bordered mt-4">
+      <div class="font-bold bg-base-300 file">
+        <div class="mr-2"><div class="w-4">&nbsp;</div></div>
+        <div class="w-2/12">Name</div>
+        <div class="flex-grow">Last commit</div>
+        <div class="w-2/12 text-right">Last update</div>
+      </div>
+      <div v-for="(file,key) in files" :key="key" class="file">
+        <div class="mr-2 text-center">
+          <div class="w-4">
+            <i :class="file.icon"></i>
           </div>
-          <div class="w-2/12"><nuxt-link :to="file.path">{{ file.name }}</nuxt-link></div>
-          <div class="flex-grow"><nuxt-link :to="file.commitPath">{{ file.subject }}</nuxt-link></div>
-          <div class="w-2/12 text-right">
-            <span>{{ file.timestamp }}</span>
-          </div>
+        </div>
+        <div class="w-2/12"><nuxt-link :to="file.path">{{ file.name }}</nuxt-link></div>
+        <div class="flex-grow"><nuxt-link :to="file.commitPath">{{ file.subject }}</nuxt-link></div>
+        <div class="w-2/12 text-right">
+          <span>{{ file.timestamp }}</span>
         </div>
       </div>
     </div>
@@ -75,6 +81,6 @@ if (readme) {
 
 <style lang="scss" scoped>
 .file {
-  @apply flex border-solid border-b py-2 px-4;
+  @apply flex border-solid border-b py-3 px-4;
 }
 </style>

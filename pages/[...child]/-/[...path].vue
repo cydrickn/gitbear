@@ -19,7 +19,7 @@ const path = parsedTree.filter((val, key) => {
 </script>
 
 <template>
-  <path-container :info="info" :path="path" :branch="branch" type="tree">
+  <path-container :info="info" :path="path" :branch="branch" :type="routeType" with-menu>
     <tree v-if="routeType === 'tree'" :branch="branch" :repo-path="info.path" :tree-path="path + '/'"></tree>
     <blob v-else :path="path" :branch="branch" :repo-path="info.path"></blob>
   </path-container>

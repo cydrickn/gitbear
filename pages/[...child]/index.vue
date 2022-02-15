@@ -2,6 +2,7 @@
 import Group from "../../components/partials/group";
 import Tree from "../../components/partials/tree";
 import {useInfo} from "../../composables/useInfo";
+import PathContainer from "../../components/partials/path-container";
 
 const params = useRoute().params;
 const path = params.child.join('/');
@@ -16,9 +17,9 @@ const info = await useInfo(path);
       <group :children="info.children"></group>
     </div>
     <div v-else>
-      <div class="mt-4">
+      <path-container :info="info" path="" :branch="info.defaultBranch" type="tree" with-menu>
         <tree :branch="info.defaultBranch" :repo-path="info.path" tree-path="/"></tree>
-      </div>
+      </path-container>
     </div>
   </div>
 </template>

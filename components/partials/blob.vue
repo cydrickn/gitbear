@@ -1,12 +1,13 @@
 <script setup>
 import {useClient} from "../../composables/useClient";
+import CurrentCommit from "../app/current-commit";
 
 const props = defineProps({
   branch: String,
   path: String,
   repoPath: String
 });
-const blob = await useClient()('/api/blob', {
+const { commit, content } = await useClient()('/api/blob', {
   params: {
     branch: props.branch,
     path: props.path,
@@ -16,11 +17,14 @@ const blob = await useClient()('/api/blob', {
 </script>
 
 <template>
-  <div class="card card-bordered">
-    <div class="mockup-code bg-transparent text-primary-content">
-<pre v-for="(line, key) in blob.content" :key="key" :data-prefix="key + 1">
+  <div>
+    <current-commit :hash="commit.hash" :author="commit.author" :subject="commit.subject" :timestamp="commit.timestamp"></current-commit>
+    <div class="card card-bordered mt-4">
+      <div class="mockup-code">
+<pre v-for="(line, key) in content" :key="key" :data-prefix="key + 1">
 <code>{{ line}}</code>
 </pre>
+      </div>
     </div>
   </div>
 </template>

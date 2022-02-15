@@ -12,7 +12,7 @@ defineProps({
           <div class="flex-row items-center space-x-4 card-body">
             <div>
               <div class="avatar">
-                <div class="rounded-full w-14 h-14 shadow !flex items-center justify-center bg-primary">
+                <div class="rounded-full w-14 h-14 shadow !flex items-center justify-center bg-primary text-primary-content">
                   <i v-if="child.type === 'group'" class="fa-solid fa-folder text-2xl"></i>
                   <i v-else class="fa-solid fa-file text-2xl"></i>
                 </div>

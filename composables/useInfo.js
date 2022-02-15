@@ -3,6 +3,11 @@ import {useClient} from "~/composables/useClient";
 import {useUtils} from "~/composables/useUtils";
 
 export const useInfo = async (path) => {
+    if (!path) {
+        const params = useRoute().params;
+        path = params.child.join('/');
+    }
+
     const client = useClient();
     const utils = useUtils();
     let infos = useState('info');

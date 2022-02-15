@@ -1,7 +1,7 @@
 <script setup>
 useMeta({
   htmlAttrs: {
-    'data-theme': 'bumblebee'
+    'data-theme': 'fantasy'
   }
 });
 </script>
