@@ -1,12 +1,12 @@
 <script setup>
+import {useUtils} from "../../composables/useUtils";
+
 const props = defineProps({
-  hash: String,
-  author: Object,
-  timestamp: Number,
-  subject: String,
+  commit: Object,
 })
 
-const truncatedHash = props.hash.substr(0, 7);
+const truncatedHash = props.commit.hash.substr(0, 7);
+const formattedDate = useUtils().formatDate(props.commit.timestamp)
 </script>
 
 <template>
@@ -18,12 +18,16 @@ const truncatedHash = props.hash.substr(0, 7);
         </div>
       </div>
       <div class="grow">
-        <div class="font-bold">{{ subject }}</div>
-        <div class="">{{ author.name }}</div>
+        <div class="font-bold">{{ commit.subject }}</div>
+        <div class="">{{ commit.author.name }}</div>
       </div>
       <div class="text-right">
         <div>{{ truncatedHash }}</div>
-        <div>{{ timestamp }}</div>
+        <ClientOnly>
+          <div :data-tip="formattedDate" class="tooltip focus:tooltip-open tooltip-left" >
+            <span>{{ commit.lastUpdate }}</span>
+          </div>
+        </ClientOnly>
       </div>
       <div>
 

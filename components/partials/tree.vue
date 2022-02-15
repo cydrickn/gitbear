@@ -2,6 +2,7 @@
 import {useClient} from "../../composables/useClient";
 import {useMd} from "../../composables/useMd";
 import CurrentCommit from "../app/current-commit";
+import {useUtils} from "../../composables/useUtils";
 
 const props = defineProps({
   branch: String,
@@ -27,6 +28,7 @@ files.forEach((file) => {
   file.commitPath = ('/' + ([props.repoPath.trim('/'), '-', 'commit', file.commit].join('/')))
       .replace(/\/+/g, '/');
   file.icon = useGetFileType(file).icon;
+  file.formattedDate = useUtils().formatDate(file.timestamp);
 
   if (file.name === 'README.md') {
     readme = file;
@@ -50,7 +52,7 @@ if (readme) {
 
 <template>
   <div>
-    <current-commit :hash="commit.hash" :author="commit.author" :subject="commit.subject" :timestamp="commit.timestamp"></current-commit>
+    <current-commit :commit="commit"></current-commit>
     <div class="card card-bordered mt-4">
       <div class="font-bold bg-base-300 file">
         <div class="mr-2"><div class="w-4">&nbsp;</div></div>
@@ -67,7 +69,11 @@ if (readme) {
         <div class="w-2/12"><nuxt-link :to="file.path">{{ file.name }}</nuxt-link></div>
         <div class="flex-grow"><nuxt-link :to="file.commitPath">{{ file.subject }}</nuxt-link></div>
         <div class="w-2/12 text-right">
-          <span>{{ file.timestamp }}</span>
+          <ClientOnly>
+            <div :data-tip="file.formattedDate" class="tooltip focus:tooltip-open tooltip-left" >
+              <span>{{ file.lastUpdate }}</span>
+            </div>
+          </ClientOnly>
         </div>
       </div>
     </div>

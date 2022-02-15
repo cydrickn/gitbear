@@ -18,7 +18,7 @@ const { commit, content } = await useClient()('/api/blob', {
 
 <template>
   <div>
-    <current-commit :hash="commit.hash" :author="commit.author" :subject="commit.subject" :timestamp="commit.timestamp"></current-commit>
+    <current-commit :commit="commit"></current-commit>
     <div class="card card-bordered mt-4">
       <div class="mockup-code">
 <pre v-for="(line, key) in content" :key="key" :data-prefix="key + 1">
