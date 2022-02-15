@@ -7,7 +7,6 @@ const utils = useUtils();
 const client = useClient();
 
 const params = useRoute().params;
-console.log(params);
 const repoPath = params.child.join('/');
 const info = await useInfo(repoPath);
 

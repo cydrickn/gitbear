@@ -22,10 +22,23 @@ export const useUtils = () => {
         return normalizeUrl(url).replace(/^\/+|\/+$/gm,'');
     }
 
+    const splitPath = (path) => {
+        const currentPaths = [];
+        return removeSlash(path).split('/').map((path) => {
+            currentPaths.push(path);
+
+            return {
+                name: path,
+                path: currentPaths.join('/')
+            };
+        });
+    }
+
     return {
         normalizeUrl,
         parseTree,
         removeSlash,
-        getRouteType
+        getRouteType,
+        splitPath
     }
 };
