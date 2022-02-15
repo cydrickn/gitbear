@@ -24,7 +24,7 @@ const pathsInfo = ref([]);
 let currentPath = '';
 const paths = props.path.split('/');
 paths.forEach((path, key) => {
-  const type = key < paths.length - 1 ? 'tree' : 'blob';
+  const type = key < paths.length - 1 ? 'tree' : props.type;
   currentPath += '/' + path;
 
   pathsInfo.value.push({

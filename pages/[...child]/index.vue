@@ -5,6 +5,7 @@ import {useInfo} from "../../composables/useInfo";
 
 const params = useRoute().params;
 const path = params.child.join('/');
+const emit = defineEmits(['project:changed']);
 
 const info = await useInfo(path);
 </script>
@@ -16,7 +17,7 @@ const info = await useInfo(path);
     </div>
     <div v-else>
       <div class="mt-4">
-        <tree branch="main" :repo-path="info.path" tree-path="/"></tree>
+        <tree :branch="info.defaultBranch" :repo-path="info.path" tree-path="/"></tree>
       </div>
     </div>
   </div>

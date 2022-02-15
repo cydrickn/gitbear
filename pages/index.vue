@@ -5,9 +5,9 @@ import Group from "../components/partials/group";
 definePageMeta({
   layout: 'app'
 });
-useCrumbs().set([]);
 const client = useClient();
 const {data: children} = await useAsyncData('children', () => client('/api/children'));
+useCrumbs().set();
 </script>
 
 <template>

@@ -1,13 +1,8 @@
 <script setup>
 import {useCrumbs} from "../composables/useCrumbs";
-import {useInfo} from "../composables/useInfo";
-import {useUtils} from "../composables/useUtils";
+import {useCrumbsItems} from "../composables/useCrumbsItems";
 
-const params = useRoute().params;
-const path = params.child.join('/');
-const info = await useInfo(path);
-
-const crumbs = useUtils().splitPath(info.path);
+const crumbs = await useCrumbsItems();
 </script>
 
 <template>
@@ -17,14 +12,18 @@ const crumbs = useUtils().splitPath(info.path);
         <nuxt-link class="text-lg font-bold" to="/">
           GitBear
         </nuxt-link>
-        <div v-for="(crumb, key) in crumbs" class="ml-4" :key="key">
-          <span>/</span>
-          <nuxt-link :to="crumb.path">{{ crumb.name }}</nuxt-link>
+        <div class="breadcrumbs ml-4">
+          <ul>
+            <li v-for="(crumb, key) in crumbs" :key="key">
+              <nuxt-link :to="crumb.path">{{ crumb.name }}</nuxt-link>
+            </li>
+          </ul>
         </div>
+
       </div>
     </div>
     <div class="mt-8">
-      <slot />
+      <slot @project:changed="updateCrumbs"/>
     </div>
   </div>
 </template>

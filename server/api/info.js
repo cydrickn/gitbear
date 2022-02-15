@@ -46,7 +46,9 @@ export default async (req, res) => {
 
         info.children = await Promise.all(files);
     } else {
-        info.branches = (await git.branch()).all;
+        const branchResult = await git.branch();
+        info.branches = branchResult.all;
+        info.defaultBranch = branchResult.current;
     }
 
     return info;

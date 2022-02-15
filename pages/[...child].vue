@@ -1,10 +1,10 @@
 <script setup>
-import {useUtils} from "../composables/useUtils";
-const utils = useUtils();
-
+import {useCrumbs} from "../composables/useCrumbs";
 definePageMeta({
   layout: 'app'
 });
+
+useCrumbs().set();
 </script>
 <template>
   <div>
