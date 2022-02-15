@@ -22,7 +22,7 @@ export default async (req, res) => {
             .map(async file => {
                 let type = 'group';
                 const git = simpleGit(childrenPath + '/' + file.name);
-                const isRepo = await git.checkIsRepo('bare');
+                const isRepo = (await git.checkIsRepo('bare')) || (await git.checkIsRepo())
 
                 if (isRepo) {
                     type = 'project';

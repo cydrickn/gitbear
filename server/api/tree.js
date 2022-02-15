@@ -17,7 +17,7 @@ export default async (req, res) => {
     const tree = await Promise.all(rawFiles.trim("\n").split("\n").map(async (file) => {
         const [ rawInfo, name ] = file.split("\t");
         const [ mode, type, hash ] = rawInfo.split(' ');
-        const log = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', '--', branch, name);
+        const log = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', branch , '--', name);
         const [ commit, authorName, authorEmail, timestamp, subject] = log.split("\n", 5);
         return {
             name: name.split('/').reverse()[0],
@@ -37,7 +37,7 @@ export default async (req, res) => {
         return res.sort((a, b) => a.type > b.type ? -1 : (a.type < b.type ? 1 : 0))
     });
 
-    const lastCommit = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', '--', branch, './' + path);
+    const lastCommit = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', branch, '--', './' + path);
     const [ commit, authorName, authorEmail, timestamp, subject ] = lastCommit.split("\n", 5);
 
     return {

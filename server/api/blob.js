@@ -18,7 +18,7 @@ export default async (req, res) => {
         return raw;
     }
 
-    const lastCommit = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', '--', branch, path);
+    const lastCommit = await git.raw('log', '--pretty=format:%H\n%aN\n%aE\n%at\n%s', '-n', '1', branch,  '--', path);
     const [ commit, authorName, authorEmail, timestamp, subject ] = lastCommit.split("\n", 5);
 
     return {

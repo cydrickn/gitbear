@@ -24,7 +24,7 @@ export default async (req, res) => {
 
     const info = { name: pathNames[pathNames.length - 1] };
     const git = simpleGit(childrenPath);
-    info.type = (await git.checkIsRepo('bare')) ? 'project' : 'group';
+    info.type = ((await git.checkIsRepo('bare')) || (await git.checkIsRepo())) ? 'project' : 'group';
     info.path = '/' + path;
 
     if (info.type === 'group') {
@@ -35,7 +35,7 @@ export default async (req, res) => {
             .map(async file => {
                 let type = 'group';
                 const git = simpleGit(childrenPath + '/' + file.name);
-                const isRepo = await git.checkIsRepo('bare');
+                const isRepo = (await git.checkIsRepo('bare')) || (await git.checkIsRepo())
 
                 if (isRepo) {
                     type = 'project';
@@ -46,7 +46,7 @@ export default async (req, res) => {
 
         info.children = await Promise.all(files);
     } else {
-        const branchResult = await git.branch();
+        const branchResult = await git.branchLocal();
         info.branches = branchResult.all;
         info.defaultBranch = branchResult.current;
     }
