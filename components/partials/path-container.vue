@@ -12,7 +12,7 @@ const props = defineProps({
 const utils = useUtils();
 const branches = ref([]);
 props.info.branches.forEach((currentBranch) => {
-  const branchPath = (props.info.path + '/' + props.type + '/' + currentBranch + '/' + props.path).replace(/\/+/g, '/');
+  const branchPath = (props.info.path + '/-/' + props.type + '/' + currentBranch + '/' + props.path).replace(/\/+/g, '/');
   branches.value.push({
     name: currentBranch,
     path: branchPath

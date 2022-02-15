@@ -1,7 +1,6 @@
 <script setup>
 import Group from "../../components/partials/group";
 import Tree from "../../components/partials/tree";
-import ProjectMenu from "../../components/partials/project-menu";
 import {useInfo} from "../../composables/useInfo";
 
 const params = useRoute().params;

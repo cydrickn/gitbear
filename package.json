@@ -20,7 +20,9 @@
     "@fortawesome/free-brands-svg-icons": "^6.0.0",
     "@fortawesome/free-regular-svg-icons": "^6.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
+    "@tailwindcss/typography": "^0.5.2",
     "daisyui": "^2.0.0-next.1",
+    "markdown-it": "^12.3.2",
     "simple-git": "^3.1.1"
   }
 }

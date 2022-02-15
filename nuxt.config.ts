@@ -11,7 +11,14 @@ export default defineNuxtConfig({
     buildModules: ['@nuxtjs/tailwindcss'],
     tailwindcss: {
         cssPath: '~/assets/tailwind.scss',
-    }
+    },
+    // vite: {
+    //     resolve: {
+    //         alias: {
+    //             'vue': 'vue/dist/vue.common'
+    //         }
+    //     },
+    // }
     // build: {
     //     postcss: {
     //         postcssOptions: {

@@ -1,5 +1,6 @@
 <script setup>
 import {useClient} from "../../composables/useClient";
+import {useMd} from "../../composables/useMd";
 
 const props = defineProps({
   branch: String,
@@ -8,22 +9,41 @@ const props = defineProps({
 });
 
 const client = useClient();
-const { data: files } = await useAsyncData('tree', () => client('/api/tree', {
+const files= await client('/api/tree', {
   params: {
     branch: props.branch,
     path: props.treePath,
     repoPath: props.repoPath,
   }
-}));
+});
 
-files.value.forEach((file) => {
+let readme = null;
+
+files.forEach((file) => {
+  file.rawPath = file.path;
   file.path = ('/' + ([props.repoPath.trim('/'), '-', file.type, props.branch, file.path].join('/')))
       .replace(/\/+/g, '/');
   file.commitPath = ('/' + ([props.repoPath.trim('/'), '-', 'commit', file.commit].join('/')))
       .replace(/\/+/g, '/');
 
+  if (file.name === 'README.md') {
+    readme = file;
+  }
+
   return file;
-})
+});
+
+if (readme) {
+  const blob = await client('/api/blob', {
+    params: {
+      branch: props.branch,
+      path: readme.rawPath,
+      repoPath: props.repoPath,
+      isRaw: true
+    }
+  });
+  readme.blob = useMd(blob);
+}
 </script>
 
 <template>
@@ -45,8 +65,10 @@ files.value.forEach((file) => {
         </div>
       </div>
     </div>
-    <div class="card card-bordered mt-4">
-      README.md
+    <div v-if="readme" class="card card-bordered mt-4">
+      <div class="card-body">
+        <article class="prose lg:prose-xl" v-html="readme.blob"></article>
+      </div>
     </div>
   </div>
 </template>

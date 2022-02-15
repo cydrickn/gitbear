@@ -1,14 +1,20 @@
-import {useAsyncData, useState} from '#app'
+import {useState} from '#app'
 import {useClient} from "~/composables/useClient";
+import {useUtils} from "~/composables/useUtils";
 
 export const useInfo = async (path) => {
     const client = useClient();
-    const repo = useState('info-' + path);
+    const utils = useUtils();
+    let infos = useState('info');
 
-    if (!repo.value) {
-        const { data } = await useAsyncData('info-' + path, () => client('/api/info', {params: {path}}));
-        repo.value = data;
+    if (!infos.value) {
+        infos.value = {};
     }
 
-    return repo;
+    if (!infos.value[utils.removeSlash(path)]) {
+        const data = await client('/api/info', {params: {path}});
+        infos.value[path] = data;
+    }
+
+    return infos.value[path];
 }

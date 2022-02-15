@@ -29,7 +29,7 @@ export const useUtils = () => {
 
             return {
                 name: path,
-                path: currentPaths.join('/')
+                path: normalizeUrl('/' + currentPaths.join('/'))
             };
         });
     }
