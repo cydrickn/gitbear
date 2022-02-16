@@ -6,18 +6,19 @@ export const useUtils = () => {
     }
 
     const parseTree = (repoPath, child, type) => {
-        repoPath = removeSlash(repoPath  + '/-/' + type);
+        type = type || getRouteType(repoPath, child);
+        repoPath = removeSlash(repoPath  + '/' + type);
         const childPath = removeSlash(child).substr(repoPath.length);
 
         return removeSlash(childPath).split('/');
     }
 
     const getRouteType = (repoPath, child) => {
-        repoPath = removeSlash(repoPath) + '/-/';
+        repoPath = removeSlash(repoPath) + '/';
         const childPath = removeSlash(child).substr(repoPath.length);
         const paths = removeSlash(childPath).split('/');
 
-        return paths[0];
+        return paths[0] || 'tree';
     }
 
     const removeSlash = (url) => {

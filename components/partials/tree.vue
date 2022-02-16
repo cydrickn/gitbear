@@ -23,9 +23,9 @@ let readme = null;
 
 files.forEach((file) => {
   file.rawPath = file.path;
-  file.path = ('/' + ([props.repoPath.trim('/'), '-', file.type, props.branch, file.path].join('/')))
+  file.path = ('/' + ([props.repoPath.trim('/'), file.type, props.branch, file.path].join('/')))
       .replace(/\/+/g, '/');
-  file.commitPath = ('/' + ([props.repoPath.trim('/'), '-', 'commit', file.commit].join('/')))
+  file.commitPath = ('/' + ([props.repoPath.trim('/'), 'commit', file.commit].join('/')))
       .replace(/\/+/g, '/');
   file.icon = useGetFileType(file).icon;
   file.formattedDate = useUtils().formatDate(file.timestamp);

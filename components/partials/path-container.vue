@@ -11,17 +11,17 @@ const props = defineProps({
 })
 
 const utils = useUtils();
-const branches = ref([]);
+const branches = [];
 props.info.branches.forEach((currentBranch) => {
-  const branchPath = (props.info.path + '/-/' + props.type + '/' + currentBranch + '/' + props.path).replace(/\/+/g, '/');
-  branches.value.push({
+  const branchPath = (props.info.path + '/' + props.type + '/' + currentBranch + '/' + props.path).replace(/\/+/g, '/');
+  branches.push({
     name: currentBranch,
     path: branchPath
   })
 });
 
 
-const pathsInfo = ref([]);
+const pathsInfo = [];
 if (props.path) {
   let currentPath = '';
   const paths = props.path.split('/');
@@ -29,7 +29,7 @@ if (props.path) {
     const type = key < paths.length - 1 ? 'tree' : props.type;
     currentPath += '/' + path;
 
-    pathsInfo.value.push({
+    pathsInfo.push({
       name: path,
       path: utils.normalizeUrl([props.info.path, '-', type, props.branch, currentPath].join('/')),
     });

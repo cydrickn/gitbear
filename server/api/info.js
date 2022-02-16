@@ -25,7 +25,7 @@ export default async (req, res) => {
     const info = { name: pathNames[pathNames.length - 1] };
     const git = simpleGit(childrenPath);
     info.type = ((await git.checkIsRepo('bare')) || (await git.checkIsRepo())) ? 'project' : 'group';
-    info.path = '/' + path;
+    info.path =utils.normalizeUrl('/' + path);
 
     if (info.type === 'group') {
         const files = (await readdir(childrenPath, {withFileTypes: true}))

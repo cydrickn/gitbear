@@ -1,21 +1,36 @@
 <script setup>
 import {useCrumbs} from "../composables/useCrumbs";
-import {useInfo} from "../composables/useInfo";
+import Group from "../components/partials/group";
+import {usePathInfo} from "../composables/usePathInfo";
+import {useUtils} from "../composables/useUtils";
+import PathContainer from "../components/partials/path-container";
+import Tree from "../components/partials/tree";
+import Blob from "../components/partials/blob";
+const utils = useUtils();
+
 definePageMeta({
   layout: 'app'
 });
 
-const info = await useInfo();
-
-useMeta({
-  title: info.name + ' | GitBear'
-})
-
 useCrumbs().set();
+const { repo, parsedTree, type } = await usePathInfo();
+let branch = '';
+let path = parsedTree.join('/');
+if (['tree', 'blob'].includes(type)) {
+  branch = parsedTree[0] || repo.defaultBranch;
+  path = parsedTree.filter((val, key) => {
+    return key !== 0;
+  }).join('/');
+}
 </script>
+
 <template>
   <div>
-    <nuxt-page />
+    <group v-if="repo.type === 'group'" :children="repo.children"></group>
+    <path-container v-else :info="repo" :path="path" :branch="branch" :type="type" with-menu>
+      <tree v-if="type === 'tree'" :branch="branch" :repo-path="repo.path" :tree-path="path + '/'"></tree>
+      <blob v-else :path="path" :branch="branch" :repo-path="repo.path"></blob>
+    </path-container>
   </div>
 </template>
 

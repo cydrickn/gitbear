@@ -14,14 +14,13 @@ const crumbs = await useCrumbsItems();
         <nuxt-link class="text-lg font-bold" to="/">
           GitBear
         </nuxt-link>
-        <div v-if="crumbs" class="breadcrumbs ml-4">
+        <div v-if="crumbs.length > 0" class="breadcrumbs ml-4">
           <ul>
             <li v-for="(crumb, key) in crumbs" :key="key">
               <nuxt-link :to="crumb.path">{{ crumb.name }}</nuxt-link>
             </li>
           </ul>
         </div>
-
       </div>
     </div>
     <div class="mt-8">
@@ -29,7 +28,3 @@ const crumbs = await useCrumbsItems();
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
