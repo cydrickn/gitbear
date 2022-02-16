@@ -31,7 +31,7 @@ if (props.path) {
 
     pathsInfo.push({
       name: path,
-      path: utils.normalizeUrl([props.info.path, '-', type, props.branch, currentPath].join('/')),
+      path: utils.normalizeUrl([props.info.path, type, props.branch, currentPath].join('/')),
     });
   });
 }
