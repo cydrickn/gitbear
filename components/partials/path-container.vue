@@ -1,5 +1,4 @@
 <script setup>
-import ProjectMenu from "./project-menu";
 import {useUtils} from "../../composables/useUtils";
 
 const props = defineProps({
@@ -36,11 +35,32 @@ if (props.path) {
   });
 }
 
+const getTabClasses = (expectedTypes) => {
+  if (typeof expectedTypes === 'string') {
+    expectedTypes = [expectedTypes];
+  }
+
+  return expectedTypes.includes(props.type) ? ['tab-bordered', 'tab-active'] : '';
+}
+
 </script>
 
 <template>
   <div>
-    <project-menu v-if="withMenu"></project-menu>
+    <div v-if="withMenu" class="tabs w-full px-4">
+      <nuxt-link class="tab" :class="[getTabClasses(['tree', 'blob'])]" :to="info.path">
+        <i class="fa-solid fa-code"></i><span>Files</span>
+      </nuxt-link>
+      <nuxt-link class="tab" :class="[getTabClasses('commits')]" :to="info.path + '/commits'">
+        <i class="fa-solid fa-code-commit"></i><span>Commits</span>
+      </nuxt-link>
+      <nuxt-link class="tab" :class="[getTabClasses('branches')]" :to="info.path + '/branches'">
+        <i class="fa-solid fa-code-branch"></i><span>Branches</span>
+      </nuxt-link>
+      <nuxt-link class="tab" :class="[getTabClasses('tags')]" :to="info.path + '/tags'">
+        <i class="fa-solid fa-tag"></i><span>Tags</span>
+      </nuxt-link>
+    </div>
     <div class="mt-8 flex items-center">
       <div class="dropdown">
         <div tabindex="0" class="m-1 select select-sm select-bordered w-full">{{ branch }}</div>
@@ -63,6 +83,11 @@ if (props.path) {
   </div>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.tab {
+  @apply px-8;
+  i {
+    @apply pr-4;
+  }
+}
 </style>
